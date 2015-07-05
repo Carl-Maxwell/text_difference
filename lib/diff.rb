@@ -5,10 +5,7 @@ class Diff
 
     [a, b].each do |x|
       x.map!.with_index do |str, number|
-        str.extend(Line)
-        str.line_number = number
-
-        str
+        Diff.make_line(str, number)
       end
     end
 
@@ -25,10 +22,7 @@ class Diff
 
       File.open(a_or_b) do |file|
         until file.eof?
-          str = file.gets.chomp
-          str.extend(Line)
-          str.line_number = lines.length
-          lines << str
+          lines << Diff.make_line(file.gets.chomp, lines.length)
         end
       end
 
@@ -40,6 +34,12 @@ class Diff
 
   module Line
     attr_accessor :line_number
+  end
+
+  def self.make_line(str, line_number)
+    str.extend(Line)
+    str.line_number = line_number
+    str
   end
 
   protected
