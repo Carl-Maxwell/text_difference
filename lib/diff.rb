@@ -3,8 +3,8 @@ class Diff
   def self.strings(a, b)
     a, b = a.split("\n"), b.split("\n")
 
-    [a, b].each do |x|
-      x.map!.with_index do |str, number|
+    [a, b].each do |a_or_b|
+      a_or_b.map!.with_index do |str, number|
         Diff.make_line(str, number)
       end
     end
@@ -44,21 +44,45 @@ class Diff
 
   protected
 
+  def self.possibilities(a, b)
+    prospects = Array.new([a.length, b.length].max) { [] }
+
+    a.each.with_index do |a_line, i|
+      ad, bd = a.dup, b.dup
+
+      equivalencies = (a + [:added]).product(b + [:removed])
+
+      equivalencies.each do |e|
+        prospects <<
+      end
+    end
+
+    prospects
+  end
+
   def self.diff(a, b)
     removed = []
     unchanged = []
 
-    a.each do |a_line|
-      b.find.with_index do |b_line, i|
-        if a_line == b_line
-          unchanged << a_line
-          b.delete_at(i)
-          next b_line
-        end
+    return Diff.possibilities(a, b)
 
-        false
-      end
-    end
+    # possible_equivalences.sort do |(a_line, b_line))|
+    #   a_line == b_line
+    # end
+
+    return possible_equivalences
+
+    # a.each do |a_line|
+    #   b.find.with_index do |b_line, i|
+    #     if a_line == b_line
+    #       unchanged << a_line
+    #       b.delete_at(i)
+    #       next b_line
+    #     end
+    #
+    #     false
+    #   end
+    # end
 
     a.each do |a_line|
       if unchanged.select { |line| line.diff_format == a_line.diff_format }.empty?
