@@ -31,16 +31,6 @@ class Diff
   module Line
     attr_accessor :line_number
 
-    # def ==(other)
-    #   normal = super
-    #
-    #   if other.respond_to?(:line_number) && self.line_number != other.line_number
-    #     return false
-    #   end
-    #
-    #   normal
-    # end
-
     def diff_format
       [self.line_number, self]
     end

@@ -14,7 +14,7 @@ describe Diff do
       it a.split(/[\/_]/)[-2] do
         load output
 
-        expect(Diff.diff_files(a, b)).to eq(diff_output)
+        expect(Diff.files(a, b)).to eq(diff_output)
       end
     end
   end
