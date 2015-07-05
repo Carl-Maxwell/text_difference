@@ -31,15 +31,15 @@ class Diff
   module Line
     attr_accessor :line_number
 
-    def ==(other)
-      normal = super
-
-      if other.respond_to?(:line_number) && self.line_number != other.line_number
-        return false
-      end
-
-      normal
-    end
+    # def ==(other)
+    #   normal = super
+    #
+    #   if other.respond_to?(:line_number) && self.line_number != other.line_number
+    #     return false
+    #   end
+    #
+    #   normal
+    # end
 
     def diff_format
       [self.line_number, self]
@@ -59,17 +59,7 @@ class Diff
     unchanged = []
 
     a.each do |a_line|
-      # if a_line.empty?
-      #   unchanged << a_line
-      #   next
-      # end
-
       b.find.with_index do |b_line, i|
-        # if b_line.empty?
-        #   b.delete_at(i)
-        #   next false
-        # end
-
         if a_line == b_line
           unchanged << a_line
           b.delete_at(i)
@@ -86,6 +76,6 @@ class Diff
       end
     end
 
-    {added: b.map(&:diff_format), removed: removed.map(&:diff_format)}
+    {added: b.map(&:diff_format).sort, removed: removed.map(&:diff_format).sort}
   end
 end
