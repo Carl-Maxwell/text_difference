@@ -30,6 +30,13 @@ class Diff
 
   module Line
     attr_accessor :line_number
+
+    def ==(other)
+      normal = super
+      return false if normal && self.line_number != other.line_number
+
+      normal
+    end
   end
 
   def self.make_line(str, line_number)
@@ -44,13 +51,16 @@ class Diff
     removed = []
     unchanged = []
 
-    a.each.with_index do |a_line, a_line_number|
-      next if a_line.empty?
+    a.each do |a_line|
+      if a_line.empty?
+        unchanged << a_line
+        next
+      end
 
-      b.find.with_index do |b_line, b_line_number|
+      b.find.with_index do |b_line, i|
         if a_line == b_line
-          unchanged << [a_line_number, a_line]
-          b = b[0...b_line_number] + b[b_line_number+1...b.length]
+          unchanged << a_line
+          b = b[0...i] + (b[i+1...b.length] || [])
           next b_line
         end
 
@@ -58,9 +68,9 @@ class Diff
       end
     end
 
-    a.each.with_index do |a_line, a_line_number|
-      unless unchanged.include?([a_line_number, a_line])
-        removed << [a_line_number, a_line]
+    a.each do |a_line|
+      unless unchanged.include?(a_line)
+        removed << a_line
       end
     end
 
