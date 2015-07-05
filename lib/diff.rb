@@ -1,6 +1,6 @@
 
 class Diff
-  def self.diff_strings(a, b)
+  def self.strings(a, b)
     a, b = a.split("\n"), b.split("\n")
 
     [a, b].each do |x|
@@ -12,7 +12,7 @@ class Diff
     self.diff(a, b)
   end
 
-  def self.diff_files(a, b)
+  def self.files(a, b)
     a, b = [a, b].map do |a_or_b|
       lines = []
 
@@ -71,7 +71,7 @@ class Diff
     end
 
     a.each do |a_line|
-      unless unchanged.include?(a_line)
+      if unchanged.select { |line| line.diff_format == a_line.diff_format }.empty?
         removed << a_line
       end
     end
