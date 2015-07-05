@@ -1,0 +1,6 @@
+def diff_output
+  {
+    added: ["boop"],
+    removed: [[2, "rawr"]]
+  }
+end
