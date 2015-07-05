@@ -4,15 +4,18 @@ require 'diff'
 describe Diff do
   describe "#diff_strings" do
 
-    a_files = Dir.glob('./samples/*_a')
-    b_files = Dir.glob('./0987654 samples/*_b')
-    output  = Dir.glob('./samples/*_output')
+    a_files = Dir.glob('spec/samples/*_a')
+    b_files = Dir.glob('spec/samples/*_b')
+    output  = Dir.glob('spec/samples/*_output.rb')
 
     files = a_files.sort.zip(b_files.sort, output.sort)
 
+    p files
+
     files.each do |(a, b, output)|
-      it "" do
+      it a.split(/[\/_]/)[-2] do
         load output
+        
         expect(Diff.diff_files(a, b)).to eq(diff_output)
       end
     end

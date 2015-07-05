@@ -33,9 +33,16 @@ class Diff
 
     def ==(other)
       normal = super
-      return false if normal && self.line_number != other.line_number
+
+      if other.respond_to?(:line_number) && self.line_number != other.line_number
+        return false
+      end
 
       normal
+    end
+
+    def diff_format
+      [self.line_number, self]
     end
   end
 
@@ -52,15 +59,20 @@ class Diff
     unchanged = []
 
     a.each do |a_line|
-      if a_line.empty?
-        unchanged << a_line
-        next
-      end
+      # if a_line.empty?
+      #   unchanged << a_line
+      #   next
+      # end
 
       b.find.with_index do |b_line, i|
+        # if b_line.empty?
+        #   b.delete_at(i)
+        #   next false
+        # end
+
         if a_line == b_line
           unchanged << a_line
-          b = b[0...i] + (b[i+1...b.length] || [])
+          b.delete_at(i)
           next b_line
         end
 
@@ -74,6 +86,6 @@ class Diff
       end
     end
 
-    {added: b, removed: removed}
+    {added: b.map(&:diff_format), removed: removed.map(&:diff_format)}
   end
 end
