@@ -13,10 +13,6 @@ class Diff
   end
 
   def self.diff_files(a, b)
-    # a_file, b_file = File.open(a_file), File.open(b_file)
-
-    # loop over each line & map to Line
-
     a, b = [a, b].map do |a_or_b|
       lines = []
 
@@ -49,6 +45,8 @@ class Diff
     unchanged = []
 
     a.each.with_index do |a_line, a_line_number|
+      next if a_line.empty?
+
       b.find.with_index do |b_line, b_line_number|
         if a_line == b_line
           unchanged << [a_line_number, a_line]
